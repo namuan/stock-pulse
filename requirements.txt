@@ -1,0 +1,6 @@
+flask
+gunicorn
+matplotlib
+pandas
+yfinance
+seaborn

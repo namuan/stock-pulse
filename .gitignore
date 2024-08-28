@@ -1,0 +1,13 @@
+venv/
+.idea/
+.python-version
+data/
+output/
+cache.sqlite
+__pycache__/
+webpages.txt
+twitter_furus_accounts.txt
+.env
+fireprofile
+.aider*
+/option-trades/
