@@ -98,7 +98,7 @@
                 data: $(this).serialize(),
                 success: function (response) {
                     let resultHtml = `<img src="data:image/png;base64,${response.plot_url}" alt="Stock Performance Comparison">`;
-                    resultHtml += '<table><tr><th>Ticker</th><th>Total Change</th><th>Total Percent Change (%)</th><th>Average Daily Change (%)</th><th>Standard Deviation of Daily Change (%)</th></tr>';
+                    resultHtml += '<table><tr><th>Ticker</th><th>Current Price</th><th>Total Percent Change (%)</th><th>Average Daily Change (%)</th><th>Standard Deviation of Daily Change (%)</th></tr>';
                     response.summary_stats.forEach(function (stat) {
                         resultHtml += `<tr>
                                 <td>${stat.Ticker}</td>
