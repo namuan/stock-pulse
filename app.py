@@ -84,7 +84,9 @@ def plot_stock_performance(stock_data_list, ticker_list, start_date, end_date):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    from datetime import date
+    current_date = date.today().isoformat()
+    return render_template('index.html', current_date=current_date)
 
 
 @app.route('/compare', methods=['POST'])
