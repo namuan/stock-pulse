@@ -47,6 +47,16 @@
         th {
             background-color: #f2f2f2;
         }
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .form-container, .result-container {
+                max-width: 100%;
+                margin-right: 0;
+            }
+        }
     </style>
 </head>
 <body>
