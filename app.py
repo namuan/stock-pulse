@@ -74,7 +74,7 @@ def plot_stock_performance(stock_data_list, ticker_list, start_date, end_date):
     plt.legend(loc="upper left")
 
     img = io.BytesIO()
-    plt.savefig(img, format='png')
+    plt.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
     plt.close()
