@@ -13,16 +13,24 @@
             padding: 20px;
         }
 
-        form {
-            margin-bottom: 20px;
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-container {
+            flex: 1;
+            max-width: 300px;
+            margin-right: 20px;
+        }
+
+        .result-container {
+            flex: 3;
         }
 
         input, button {
             margin: 5px 0;
-        }
-
-        #result {
-            margin-top: 20px;
+            width: 100%;
         }
 
         table {
@@ -43,16 +51,20 @@
 </head>
 <body>
 <h1>Stock Performance Comparison</h1>
-<form id="comparison-form">
-    <label for="tickers">Tickers (comma-separated):</label><br>
-    <input type="text" id="tickers" name="tickers" value="META,TSLA" required><br>
-    <label for="start_date">Start Date:</label><br>
-    <input type="date" id="start_date" name="start_date" value="2000-01-01" required><br>
-    <label for="end_date">End Date:</label><br>
-    <input type="date" id="end_date" name="end_date" value="{{ current_date }}" required><br>
-    <button type="submit">Compare</button>
-</form>
-<div id="result"></div>
+<div class="container">
+    <div class="form-container">
+        <form id="comparison-form">
+            <label for="tickers">Tickers (comma-separated):</label><br>
+            <input type="text" id="tickers" name="tickers" value="META,TSLA" required><br>
+            <label for="start_date">Start Date:</label><br>
+            <input type="date" id="start_date" name="start_date" value="2000-01-01" required><br>
+            <label for="end_date">End Date:</label><br>
+            <input type="date" id="end_date" name="end_date" value="{{ current_date }}" required><br>
+            <button type="submit">Compare</button>
+        </form>
+    </div>
+    <div class="result-container" id="result"></div>
+</div>
 
 <script>
     $(document).ready(function () {
