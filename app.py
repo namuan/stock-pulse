@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --quiet --script
 # /// script
 # dependencies = [
 #   "PyQt6",
@@ -68,9 +68,7 @@ def output_dir():
 
 def download_ticker_data(ticker, start, end):
     try:
-        ticker_df = yf.download(ticker, start=start, end=end)
-        ticker_df.to_csv(f"{output_dir()}/{ticker}.csv")
-        return ticker_df
+        return yf.download(ticker, start=start, end=end, multi_level_index=False)
     except:
         print(f"Unable to fetch data for ticker: {ticker}")
         return pd.DataFrame()
@@ -79,7 +77,7 @@ def download_ticker_data(ticker, start, end):
 def fetch_stock_data(ticker, start_date, end_date):
     try:
         stock_data = download_ticker_data(ticker, start_date, end_date)
-        return stock_data["Adj Close"]
+        return stock_data["Close"]
     except Exception as e:
         print(f"Error fetching data for {ticker}: {e}")
         return None
