@@ -1,15 +1,58 @@
+#!/usr/bin/env python3
+# /// script
+# dependencies = [
+#   "PyQt6",
+#   "flask",
+#   "gunicorn",
+#   "matplotlib",
+#   "pandas",
+#   "yfinance",
+#   "seaborn",
+#   "PyQt6-WebEngine",
+#   "flask-cors",
+# ]
+# ///
+"""
+Stock Performance Comparison Tool
+
+This script provides a GUI application that allows users to:
+- Compare stock performance for multiple tickers
+- Generate performance comparison plots
+- View summary statistics for selected stocks
+
+The application combines Flask for backend processing and PyQt6 for the GUI.
+
+Usage:
+./gui.py
+
+Features:
+- Interactive web interface
+- Real-time stock data fetching using yfinance
+- Comparative visualization of stock performance
+- Statistical analysis including total change, percent change, and volatility metrics
+"""
+import argparse
 import base64
+import faulthandler
 import io
 import os
+import sys
+import threading
 
 import matplotlib
 import seaborn as sns
-from flask import Flask, render_template, request, jsonify
+from PyQt6.QtCore import QUrl
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWidgets import QApplication
+from flask import Flask
+from flask import render_template, request, jsonify
 
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import yfinance as yf
+
+faulthandler.enable()
 
 app = Flask(__name__)
 
@@ -113,5 +156,51 @@ def compare():
     })
 
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5010)
+def run_flask():
+    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True, use_reloader=False)
+
+
+class Browser:
+    def __init__(self):
+        self.qt_app = QApplication(sys.argv)
+        self.web = QWebEngineView()
+        self.web.setGeometry(100, 100, 800, 600)
+        self.web.setWindowTitle("StockPulse")
+        self.web.load(QUrl("http://127.0.0.1:5000"))
+        self.web.show()
+
+        # Add cleanup handling
+        self.web.destroyed.connect(self._on_destroy)
+
+    def _on_destroy(self):
+        self.qt_app.quit()
+
+    def run(self):
+        # Start Flask server in a separate thread
+        flask_thread = threading.Thread(target=run_flask)
+        flask_thread.daemon = True
+        flask_thread.start()
+
+        # Use aboutToQuit instead of directly calling sys.exit
+        self.qt_app.aboutToQuit.connect(self._cleanup)
+        self.qt_app.exec()
+
+    def _cleanup(self):
+        self.web.close()
+        self.web.deleteLater()
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Stock Performance Comparison Tool')
+    parser.add_argument('--server-only', action='store_true', help='Run only the Flask server without GUI')
+    args = parser.parse_args()
+
+    if args.server_only:
+        run_flask()
+    else:
+        browser = Browser()
+        browser.run()
+
+
+if __name__ == "__main__":
+    main()

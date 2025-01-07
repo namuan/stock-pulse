@@ -1,6 +1,9 @@
+PyQt6
+PyQt6-WebEngine
 flask
+flask-cors
 gunicorn
 matplotlib
 pandas
-yfinance
 seaborn
+yfinance

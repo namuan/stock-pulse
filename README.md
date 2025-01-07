@@ -13,11 +13,6 @@ Compare the stock performance of multiple companies over a specified date range.
 ## Requirements
 
 - Python 3.x
-- Flask
-- pandas
-- matplotlib
-- seaborn
-- yfinance
 
 ## Installation
 
@@ -36,11 +31,19 @@ Compare the stock performance of multiple companies over a specified date range.
 
 ## Usage
 
+### Run as Desktop application
+
+```bash
+python3 app.py
+```
+
+### Run as Web application
+
 1. Start the Flask application:
 
-   ```bash
-   python app.py
-   ```
+```bash
+python3 app.py --server-only
+```
 
 2. Open your web browser and go to `http://localhost:5010`.
 
