@@ -156,17 +156,19 @@ def compare():
     })
 
 
-def run_flask():
-    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True, use_reloader=False)
+def run_flask(host, port):
+    app.run(host=host, port=port, debug=False, threaded=True, use_reloader=False)
 
 
 class Browser:
-    def __init__(self):
+    def __init__(self, window_title, host="127.0.0.1", port=5000):
+        self.host = host
+        self.port = port
         self.qt_app = QApplication(sys.argv)
         self.web = QWebEngineView()
         self.web.setGeometry(100, 100, 800, 600)
-        self.web.setWindowTitle("StockPulse")
-        self.web.load(QUrl("http://127.0.0.1:5000"))
+        self.web.setWindowTitle(window_title)
+        self.web.load(QUrl(f"http://{self.host}:{self.port}"))
         self.web.show()
 
         # Add cleanup handling
@@ -177,7 +179,13 @@ class Browser:
 
     def run(self):
         # Start Flask server in a separate thread
-        flask_thread = threading.Thread(target=run_flask)
+        flask_thread = threading.Thread(
+            target=run_flask,
+            kwargs={
+                'host': self.host,
+                'port': self.port,
+            }
+        )
         flask_thread.daemon = True
         flask_thread.start()
 
@@ -195,12 +203,14 @@ def main():
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('--server-only', action='store_true', help='Run only the Flask server without GUI')
+    parser.add_argument('--host', default="127.0.0.1", help='Host address to run the server on')
+    parser.add_argument('--port', type=int, default=5000, help='Port number to run the server on')
     args = parser.parse_args()
 
     if args.server_only:
-        run_flask()
+        run_flask(args.host, args.port)
     else:
-        browser = Browser()
+        browser = Browser(window_title="StockPulse", host=args.host, port=args.port)
         browser.run()
 
 
