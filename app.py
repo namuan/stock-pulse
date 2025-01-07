@@ -23,7 +23,9 @@ This script provides a GUI application that allows users to:
 The application combines Flask for backend processing and PyQt6 for the GUI.
 
 Usage:
-./gui.py
+./app.py
+Or
+./app.py --server-only
 
 Features:
 - Interactive web interface
@@ -191,7 +193,9 @@ class Browser:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Stock Performance Comparison Tool')
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument('--server-only', action='store_true', help='Run only the Flask server without GUI')
     args = parser.parse_args()
 
